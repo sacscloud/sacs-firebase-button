@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+
+    <title>sacs-firebase-button demo</title>
+
+    <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
+
+    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
+    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../sacs-firebase-button.html">
+
+    <custom-style>
+      <style is="custom-style" include="demo-pages-shared-styles">
+      </style>
+    </custom-style>
+  </head>
+  <body>
+    <div class="vertical-section-container centered">
+      <h3>Basic sacs-firebase-button demo</h3>
+      <demo-snippet>
+        <template>
+          <input type="text" id="name">
+          <input type="text" id="age">
+          <input type="text" id="cellphone">
+          
+  
+          <sacs-firebase-button path="inventoryCount" label="Guardar" fields='[
+          {
+              "input": "#name",
+              "path": "sucursal",
+              "type":"text"
+          }, 
+          {
+              "input": "#age",
+              "path": "StarData",
+              "type":"text"
+          },
+          {
+              "input": "#cellphone",
+              "path": "StarData",
+              "type":"text"
+  
+          }
+      ]'></sacs-firebase-button>
+        </template>
+      </demo-snippet>
+    </div>
+  </body>
+</html>
