@@ -17,9 +17,13 @@ Polymer({
             type: String,
             value: "Submit"
         },
-        path: {
+        account: {
             type: String,
-            value: "data"
+            value: "myAccount"
+        },
+        api: {
+            type: String,
+            value: "myApi"
         },
         fields: {
             type: Array,
@@ -44,21 +48,19 @@ Polymer({
     __saveInputData: function (inputs) {
 
         const value = this.parentNode.querySelector(inputs.input).value
-        const path = inputs.path;
 
 
         if (!this._validateInput(value)) {
             return;
         }
 
-        const db = firebase.database().ref(this.path).child(path);
-
-
+        const db = firebase.database().ref(`/accounts/${this.account}`).child(this.api);
 
         const objData = {
             input: inputs.input,
             type: inputs.type,
-            value: value
+            value: value, 
+            uid: firebase.auth().currentUser.uid
         };
 
 
