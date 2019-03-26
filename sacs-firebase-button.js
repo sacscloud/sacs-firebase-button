@@ -49,7 +49,6 @@ Polymer({
 
         const value = this.parentNode.querySelector(inputs.input).value
 
-
         if (!this._validateInput(value)) {
             return;
         }
@@ -57,10 +56,10 @@ Polymer({
         const db = firebase.database().ref(`/accounts/${this.account}`).child(this.api);
 
         const objData = {
-            input: inputs.input,
-            type: inputs.type,
-            value: value, 
-            uid: firebase.auth().currentUser.uid
+            inventoryCount: value, 
+            uid: firebase.auth().currentUser.uid,
+            created:Date.now(),
+            modified:Date.now()
         };
 
 
