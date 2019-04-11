@@ -39,33 +39,48 @@ Polymer({
 
     _listenerClick: function (e) {
 
-        for (let inputs of this.fields) {
-
-            this.__saveInputData(inputs);
-        }
-
+        this.__saveInputsData();
     },
-    __saveInputData: function (inputs) {
 
-        const value = this.parentNode.querySelector(inputs.input).value
-
-        if (!this._validateInput(value)) {
-            return;
-        }
-
-        const db = firebase.database().ref(`/accounts/${this.account}`).child(this.api);
+    __saveInputsData: function () {
 
         const objData = {
-            inventoryCount: value, 
             uid: firebase.auth().currentUser.uid,
-            created:Date.now(),
-            modified:Date.now()
+            created: Date.now(),
+            modified: Date.now()
         };
 
+        let objFinal = this.__saveInputProperty(objData);
 
-        db.push(objData);
+        const db = firebase.database().ref(`/accounts/${this.account}`).child(this.api);
+        db.push(objFinal);
+    },
 
+    __saveInputProperty: function (obj) {
 
+        for (let inputs of this.fields) {
+
+            const value = this.parentNode.querySelector(inputs.input).value
+
+            if (!this._validateInput(value)) {
+                return;
+            }
+
+            try {
+                Object.defineProperty(obj, inputs.path, 
+                    { 
+                     enumerable: true,
+                     value 
+                    }
+                );
+
+            } catch (err) {
+                console.log("[Error al definir property]", err);
+            }
+
+        }
+
+        return obj;
     },
 
     _validateInput: function (value) {
