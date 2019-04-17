@@ -1,6 +1,6 @@
 {
   "name": "sacs-firebase-button",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "push data of inputs in firebase",
   "main": "sacs-firebase-button.html",
   "authors": [

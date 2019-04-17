@@ -23,23 +23,45 @@
       <demo-snippet>
         <template>
           <input type="text" id="name">
-          <input type="text" id="age">
+          <input type="number" id="age">
           <input type="text" id="cellphone">
+  
+            <select id="select">
+              <option value="volvo">Volvo</option>
+              <option value="saab">Saab</option>
+              <option value="opel">Opel</option>
+              <option value="audi">Audi</option>
+            </select>
+  
+            <input type="checkbox" id="check" value="checkbox value"> <label for="check">selecciona</label>
           
   
+            
           <sacs-firebase-button label="Guardar" fields='[
           {
               "input": "#name",
-              "path": "sucursal"
+              "path": "sucursal", 
+              "type":"text"
           }, 
           {
               "input": "#age",
-              "path": "inventory"
+              "path": "ageData",
+              "type":"number"
           },
           {
               "input": "#cellphone",
-              "path": "StarData"
-  
+              "path": "StarData",
+              "type":"text"
+          },
+          {
+              "input": "#select",
+              "path": "selectData",
+              "type":"select"
+          },
+          {
+              "input": "#check",
+              "path": "checkData",
+              "type":"check"
           }
       ]'></sacs-firebase-button>
         </template>

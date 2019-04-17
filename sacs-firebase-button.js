@@ -58,35 +58,58 @@ Polymer({
 
     __saveInputProperty: function (obj) {
 
-        for (let inputs of this.fields) {
+        let data = this.__createDataInput(obj);
 
-            const value = this.parentNode.querySelector(inputs.input).value
-
-            if (!this._validateInput(value)) {
-                return;
-            }
-
-            try {
-                Object.defineProperty(obj, inputs.path, 
-                    { 
-                     enumerable: true,
-                     value 
-                    }
-                );
-
-            } catch (err) {
-                console.log("[Error al definir property]", err);
-            }
-
-        }
-
-        return obj;
+        return data;
     },
 
     _validateInput: function (value) {
 
         return (value === "" || value === null || value === undefined) ? false : true;
+    },  
+
+    __createDataInput: function(obj){
+
+        
+        let value = null;
+
+        for (let data of this.fields) {
+
+        switch(data.type){
+            case "text": 
+            value = this.parentNode.querySelector(data.input).value;
+             break;
+            case "number": 
+            value = this.parentNode.querySelector(data.input).value;
+            break;
+            case "check": 
+            value = this.parentNode.querySelector(data.input).checked;
+            break;
+            case "select": 
+            value = this.parentNode.querySelector(data.input).value;
+            break;
+        }
+
+        if (!this._validateInput(value)) {
+            return;
+        }
+
+        try {
+            Object.defineProperty(obj, data.path, 
+                { 
+                 enumerable: true,
+                 value 
+                }
+            );
+
+        } catch (err) {
+            console.log("[Error al definir property]", err);
+        }
     }
 
+        return obj;
+
+    
+    }
 });
 
