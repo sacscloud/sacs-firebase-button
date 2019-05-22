@@ -52,29 +52,27 @@ Polymer({
 
         let objFinal = this.__saveInputProperty(objData);
 
-      
+
         const db = firebase.database().ref(`/accounts/${this.account}`).child(this.api);
         const key = db.push(objFinal).key;
-         //var key = "FADGA";
+
         this.__pushPerformInventory(key);
-
-
 
     },
 
     __pushPerformInventory: function (keyFather) {
 
         Promise.all([this.__getWarehouse(), this.__getBranchOffice()])
-        .then( values => {
-            
-            const [warehouses, branchOffices] = values;
-    
-            this.__filterProducts(warehouses, branchOffices, keyFather);
-        });
-         
+            .then(values => {
+
+                const [warehouses, branchOffices] = values;
+
+                this.__filterProducts(warehouses, branchOffices, keyFather);
+            });
+
     },
 
-    __filterProducts: function(warehouses, branchOffices, keyFather){
+    __filterProducts: function (warehouses, branchOffices, keyFather) {
 
         const existenceDB = firebase.database().ref(`/accounts/${this.account}/existenciasproductos`);
         const performDB = firebase.database().ref(`/accounts/${this.account}/performinventorycount`);
@@ -89,23 +87,24 @@ Polymer({
 
             const arrayExistence = this.__snapshotToArray(snapshot);
 
+
             products.map(productObj => {
 
-                const { nombre: producto, costo, sku } = productObj;
+                const { nombre: producto, costo, sku, variante } = productObj;
                 let existencia = null;
 
                 for (let objExistence of arrayExistence) {
                     for (let key in objExistence) {
-                
+
                         if (key === "producto" && objExistence.producto === productObj.$key) {
-                    
+
                             existencia = (typeof objExistence.existencia === 'string') ? parseInt(objExistence.existencia) : objExistence.existencia;
-                            
+
                             const almacen = this.__getNameWarehouse(warehouses, objExistence.almacen);
                             const sucursal = this.__getNameBranchOffice(branchOffices, objExistence.nombre_sucursal);
 
 
-                             if(almacen === this.parentNode.querySelector("#almacen").value && sucursal === this.parentNode.querySelector("#outlet").value){
+                            if (almacen === this.parentNode.querySelector("#almacen").value && sucursal === this.parentNode.querySelector("#outlet").value) {
                                 const product = {
                                     costo,
                                     counted,
@@ -113,16 +112,18 @@ Polymer({
                                     existencia,
                                     modified,
                                     producto,
-                                    key_padre:keyFather,
+                                    key_padre: keyFather,
                                     almacen,
                                     sucursal,
                                     sku,
-                                    uid
+                                    uid,
+                                    variante: variante || 'sin variante'
+
                                 }
 
                                 performDB.push(product);
 
-                             }
+                            }
 
                         }
                     }
@@ -135,32 +136,32 @@ Polymer({
         });
     },
 
-    __getNameWarehouse: function(array, key){
+    __getNameWarehouse: function (array, key) {
 
         return array.filter(element => element.$key === key)[0].almacen;
-      
+
 
     },
 
-    __getNameBranchOffice: function(array, key){
+    __getNameBranchOffice: function (array, key) {
 
         return array.filter(element => element.$key === key)[0].nombre_sucursal;
-     
+
     },
 
-    __getWarehouse: function(){
+    __getWarehouse: function () {
         const warehouseDB = firebase.database().ref(`/accounts/${this.account}/almacenes`);
 
-        return warehouseDB.once('value').then( snapshot =>{
-             return this.__snapshotToArray(snapshot);
+        return warehouseDB.once('value').then(snapshot => {
+            return this.__snapshotToArray(snapshot);
         })
     },
 
-    __getBranchOffice:function(){
+    __getBranchOffice: function () {
         const branchOfficeDB = firebase.database().ref(`/accounts/${this.account}/sucursales`);
-        return branchOfficeDB.once('value').then( snapshot =>{
+        return branchOfficeDB.once('value').then(snapshot => {
             return this.__snapshotToArray(snapshot);
-       })
+        })
 
     },
 
