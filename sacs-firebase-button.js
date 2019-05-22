@@ -87,10 +87,9 @@ Polymer({
 
             const arrayExistence = this.__snapshotToArray(snapshot);
 
-
             products.map(productObj => {
 
-                const { nombre: producto, costo, sku, variante } = productObj;
+                const { nombre: producto, costo, sku, variante, tipo } = productObj;
                 let existencia = null;
 
                 for (let objExistence of arrayExistence) {
@@ -117,7 +116,10 @@ Polymer({
                                     sucursal,
                                     sku,
                                     uid,
-                                    variante: variante || 'sin variante'
+                                    variante: variante || 'sin variante',
+                                    tipo,
+                                    diferencia_unidades: counted - existencia,
+                                    diferencia_costos: (costo * counted) - (costo * existencia)
 
                                 }
 
@@ -130,8 +132,6 @@ Polymer({
                 }
 
             });
-
-
 
         });
     },
@@ -218,7 +218,6 @@ Polymer({
                 return;
             }
 
-
             try {
                 Object.defineProperty(obj, data.path,
                     {
@@ -233,7 +232,6 @@ Polymer({
         }
 
         return obj;
-
 
     }
 });
